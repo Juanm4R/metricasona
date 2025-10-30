@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Reporte de Performance — K6</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --muted:#9aa7bf;
+    --accent:#6EE7B7;
+    --accent-2:#7DD3FC;
+    --glass: rgba(255,255,255,0.04);
+    --success:#10b981;
+    --danger:#ef4444;
+    --card-radius:14px;
+    font-family:"Inter","Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:linear-gradient(180deg,#071028 0%,#071428 50%,#071022 100%);
+    color:#e6eef8;padding:28px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;display:grid;gap:18px}
+  header{display:flex;align-items:center;gap:18px}
+  .logo{
+    width:64px;height:64px;border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#072033;font-size:24px;
+    box-shadow:0 6px 20px rgba(46,190,160,.12),inset 0 -6px 18px rgba(255,255,255,.06);
+  }
+  header h1{font-size:20px}
+  header p{color:var(--muted);font-size:13px;margin-top:6px}
+  .badge{margin-left:auto;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;background:rgba(255,255,255,0.03);color:var(--accent);border:1px solid rgba(124,58,237,0.06)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:18px;box-shadow:0 8px 30px rgba(2,6,23,.5);border:1px solid rgba(255,255,255,.03)}
+  .summary{grid-column:span 12;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .item{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.01));display:flex;flex-direction:column;gap:8px}
+  .label{font-size:13px;color:var(--muted)}
+  .value{font-size:20px;font-weight:700}
+  .sub{font-size:12px;color:var(--muted)}
+  table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px dashed rgba(255,255,255,0.03)}
+  th{color:var(--muted);font-weight:600}
+  td strong{color:#fff}
+  .p-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .p-label{width:60px;font-size:13px;color:var(--muted)}
+  .bar{flex:1;background:var(--glass);height:12px;border-radius:999px;overflow:hidden;position:relative}
+  .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:999px 0 0 999px;width:0%}
+  .p-value{width:56px;text-align:right;font-size:13px;color:var(--muted)}
+  pre.raw{background:rgba(0,0,0,.25);padding:12px;border-radius:10px;color:#dfeffc;overflow:auto;font-size:12px;margin-top:12px;border:1px solid rgba(255,255,255,.03)}
+  @media(max-width:900px){.summary{grid-template-columns:repeat(2,1fr)}.grid{grid-auto-rows:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">K6</div>
+    <div>
+      <h1>Reporte de Performance — K6</h1>
+      <p>Script: <strong>prueba-l.js</strong> · Ejecución local · <span class="small">Duración máxima 1m0s</span></p>
+    </div>
+    <div class="badge">k6 v0.49</div>
+  </header>
+
+  <div class="grid">
+    <!-- SUMMARY -->
+    <div class="card summary">
+      <div class="item">
+        <div class="label">Checks totales</div>
+        <div class="value">990</div>
+        <div class="sub">0% exitosos · 100% fallidos</div>
+      </div>
+      <div class="item">
+        <div class="label">HTTP Requests</div>
+        <div class="value">495</div>
+        <div class="sub">16.00 req/s</div>
+      </div>
+      <div class="item">
+        <div class="label">Usuarios virtuales (VUs)</div>
+        <div class="value">20</div>
+        <div class="sub">máx/min concurrentes</div>
+      </div>
+      <div class="item">
+        <div class="label">Duración promedio req</div>
+        <div class="value">48.73 ms</div>
+        <div class="sub">p(90): 73.54 · p(95): 96.71</div>
+      </div>
+    </div>
+
+    <!-- HTTP METRICS -->
+    <div class="card" style="grid-column:span 7">
+      <h3 style="margin-bottom:8px">HTTP Metrics</h3>
+      <table>
+        <tbody>
+          <tr><th>Duración (avg)</th><td><strong>48.73 ms</strong></td></tr>
+          <tr><th>Duración (min / med / max)</th><td>22.44 / 39.78 / 309.07 ms</td></tr>
+          <tr><th>Requests fallidos</th><td style="color:var(--danger)">100% (495/495)</td></tr>
+          <tr><th>Checks “status es 200”</th><td>0% ✓0 / ✗495</td></tr>
+          <tr><th>Checks “respuesta contiene token”</th><td>0% ✓0 / ✗495</td></tr>
+        </tbody>
+      </table>
+
+      <h4 style="margin-top:14px;margin-bottom:6px">Execution</h4>
+      <table>
+        <tbody>
+          <tr><th>Iterations</th><td><strong>495</strong> (16.00/s)</td></tr>
+          <tr><th>Iteration duration</th><td>avg 1.24s · min 1.02s · max 8.52s</td></tr>
+          <tr><th>Escenario</th><td>default (20 looping VUs durante 30s)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PERCENTILES -->
+    <div class="card" style="grid-column:span 5">
+      <h3 style="margin-bottom:8px">Percentiles — HTTP Req Duration</h3>
+      <div class="p-row"><div class="p-label">min</div><div class="bar"><i style="width:7%"></i></div><div class="p-value">22 ms</div></div>
+      <div class="p-row"><div class="p-label">med</div><div class="bar"><i style="width:13%"></i></div><div class="p-value">39 ms</div></div>
+      <div class="p-row"><div class="p-label">avg</div><div class="bar"><i style="width:16%"></i></div><div class="p-value">48 ms</div></div>
+      <div class="p-row"><div class="p-label">p90</div><div class="bar"><i style="width:24%"></i></div><div class="p-value">73 ms</div></div>
+      <div class="p-row"><div class="p-label">p95</div><div class="bar"><i style="width:31%"></i></div><div class="p-value">96 ms</div></div>
+      <div class="p-row"><div class="p-label">max</div><div class="bar"><i style="width:100%"></i></div><div class="p-value">309 ms</div></div>
+      <p class="sub" style="margin-top:10px">Las barras están escaladas en relación al máximo (309 ms).</p>
+    </div>
+
+    <!-- NETWORK -->
+    <div class="card" style="grid-column:span 12">
+      <h3 style="margin-bottom:8px">Network</h3>
+      <table>
+        <tbody>
+          <tr><th>Data recibida</th><td><strong>134 kB</strong> (4.3 kB/s)</td></tr>
+          <tr><th>Data enviada</th><td><strong>68 kB</strong> (2.2 kB/s)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RAW OUTPUT -->
+    <div class="card" style="grid-column:span 12">
+      <h3>Salida original (K6)</h3>
+      <pre class="raw">
+execution: local
+  script: prueba-l.js
+  output: -
+
+scenarios: 1 (100%)  · 20 max VUs · 1m0s max duration
+   default: 20 looping VUs for 30s (gracefulStop: 30s)
+
+█ TOTAL RESULTS
+  checks_total...........: 990 (32.01/s)
+  checks_succeeded.......: 0.00% (0/990)
+  checks_failed..........: 100.00% (990/990)
+  ✗ status es 200 ............ 0% ✓0 / ✗495
+  ✗ respuesta contiene token .. 0% ✓0 / ✗495
+
+HTTP
+  http_req_duration......: avg=48.73ms min=22.44ms med=39.78ms max=309.07ms p(90)=73.54ms p(95)=96.71ms
+  http_req_failed........: 100.00% 495/495
+  http_reqs..............: 495 (16.00/s)
+
+EXECUTION
+  iteration_duration.....: avg=1.24s min=1.02s med=1.04s max=8.52s p(90)=1.09s p(95)=1.11s
+  iterations.............: 495 (16.00/s)
+  vus....................: 20 (min=20 max=20)
+  vus_max................: 20 (min=20 max=20)
+
+NETWORK
+  data_received..........: 134 kB (4.3 kB/s)
+  data_sent..............: 68 kB  (2.2 kB/s)
+
+running (0m30.9s), 00/20 VUs, 495 complete, 0 interrupted
+default ✓ [======================================] 20 VUs 30s
+      </pre>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.bar > i').forEach((el,i)=>{
+    const w=el.style.width;
+    el.style.width='0%';
+    setTimeout(()=>el.style.width=w,120+i*80);
+  });
+});
+</script>
+</body>
+</html>
