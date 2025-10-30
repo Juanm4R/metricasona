@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Conclusiones Performance Testing — UADE</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --muted:#9aa7bf;
+    --accent:#7c3aed; /* violeta K6 branding */
+    --accent-2:#c084fc;
+    --glass: rgba(255,255,255,0.04);
+    --success:#10b981;
+    --danger:#ef4444;
+    --card-radius:14px;
+    font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background: linear-gradient(180deg,#071028 0%,#071428 50%,#071022 100%);
+    color:#e6eef8;padding:28px;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1100px;margin:0 auto;display:grid;gap:18px}
+  header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+  .logo{
+    width:64px;height:64px;border-radius:12px;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#072033;font-size:24px;
+    box-shadow:0 6px 20px rgba(124,58,237,.12),inset 0 -6px 18px rgba(255,255,255,.06);
+  }
+  header h1{font-size:20px}
+  header p{color:var(--muted);font-size:13px;margin-top:6px}
+  .badge{margin-left:auto;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;background:rgba(255,255,255,0.03);color:var(--accent);border:1px solid rgba(124, 58, 237, 0.06)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:18px;box-shadow:0 8px 30px rgba(2,6,23,.5);border:1px solid rgba(255,255,255,.03)}
+  h3{margin-bottom:8px}
+  table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13px}
+  th,td{text-align:left;padding:8px 10px;border-bottom:1px dashed rgba(255,255,255,0.03)}
+  th{color:var(--muted);font-weight:600}
+  td strong{color:#fff}
+  .summary{grid-column:span 12;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:12px}
+  .item{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,.015),rgba(255,255,255,.01));display:flex;flex-direction:column;gap:8px}
+  .label{font-size:13px;color:var(--muted)}
+  .value{font-size:20px;font-weight:700}
+  .sub{font-size:12px;color:var(--muted)}
+  @media(max-width:900px){.summary{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">K6</div>
+    <div>
+      <h1>Conclusiones Performance Testing</h1>
+      <p>Herramientas evaluadas: <strong>Loader.io · ApacheBench · k6</strong></p>
+    </div>
+  </header>
+
+  <!-- RESUMEN -->
+  <div class="card summary">
+    <div class="item">
+      <div class="label">Loader.io</div>
+      <div class="value">Fácil uso</div>
+      <div class="sub">Ideal para pruebas rápidas de páginas estáticas o APIs simples.</div>
+    </div>
+    <div class="item">
+      <div class="label">ApacheBench</div>
+      <div class="value">Benchmark clásico</div>
+      <div class="sub">Mide throughput y latencias promedio, ideal para comparar servidores.</div>
+    </div>
+    <div class="item">
+      <div class="label">k6</div>
+      <div class="value">Tests detallados</div>
+      <div class="sub">Permite scripting complejo, validaciones y métricas completas de APIs o apps dinámicas.</div>
+    </div>
+  </div>
+
+  <!-- DETALLE -->
+  <div class="card" style="grid-column:span 12">
+    <h3>Comparativa de ventajas y limitaciones</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Herramienta</th>
+          <th>Ventajas</th>
+          <th>Limitaciones</th>
+          <th>Ideal para</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Loader.io</td>
+          <td>Rápido, fácil, cloud-based</td>
+          <td>Limitado free tier, métricas básicas</td>
+          <td>Páginas estáticas, tests rápidos</td>
+        </tr>
+        <tr>
+          <td>ApacheBench</td>
+          <td>Ligero, mide throughput y latencia</td>
+          <td>Escenarios básicos, sin scripting</td>
+          <td>Comparar servidores, tests de carga simple</td>
+        </tr>
+        <tr>
+          <td>k6</td>
+          <td>Métricas completas, scripting flexible, integración CI/CD</td>
+          <td>Requiere JS y CLI, curva de aprendizaje</td>
+          <td>APIs y apps dinámicas, pruebas realistas</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="card" style="grid-column:span 12">
+    <h3>Conclusiones finales</h3>
+    <ul style="margin-top:8px;font-size:13px;line-height:1.6">
+      <li>Loader.io es excelente para pruebas rápidas de páginas simples y APIs sin lógica compleja.</li>
+      <li>ApacheBench sigue siendo útil para medir la capacidad bruta de servidores y comparar configuraciones de hosting.</li>
+      <li>k6 es la herramienta más completa para análisis de performance detallado, escenarios realistas y validación de respuestas.</li>
+      <li>Los resultados de k6 mostraron que los checks fallaban al 100%: esto indica problemas de URL, headers, autenticación o validaciones en el script.</li>
+      <li>Elegir la herramienta depende del objetivo: rapidez y facilidad (Loader.io), benchmarking clásico (ApacheBench) o análisis avanzado (k6).</li>
+    </ul>
+  </div>
+</div>
+</body>
+</html>
