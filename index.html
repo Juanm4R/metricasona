@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Reporte APacheBench — UADE</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --muted:#9aa7bf;
+    --accent:#6EE7B7;
+    --accent-2:#7DD3FC;
+    --glass: rgba(255,255,255,0.04);
+    --success:#10b981;
+    --danger:#ef4444;
+    --card-radius:14px;
+    font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  }
+  /* Reset */
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background: linear-gradient(180deg,#071028 0%, #071428 50%, #071022 100%);
+    color:#e6eef8;
+    -webkit-font-smoothing:antialiased;
+    padding:28px;
+  }
+
+  .wrap{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    gap:18px;
+    grid-template-columns: 1fr;
+  }
+
+  header{
+    display:flex;
+    align-items:center;
+    gap:18px;
+  }
+  .logo{
+    width:64px;height:64px;border-radius:12px;
+    background: linear-gradient(135deg,var(--accent),var(--accent-2));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:700;color:#072033;font-size:24px;
+    box-shadow: 0 6px 20px rgba(46, 190, 160, 0.12), inset 0 -6px 18px rgba(255,255,255,0.06);
+  }
+  header h1{font-size:20px;line-height:1}
+  header p{color:var(--muted);font-size:13px;margin-top:6px}
+
+  /* Main layout */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat(12,1fr);
+    gap:18px;
+  }
+
+  .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius: var(--card-radius);
+    padding:18px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.5);
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  /* Summary cards */
+  .summary{
+    grid-column: span 12;
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    gap:14px;
+  }
+  .summary .item{
+    padding:14px;
+    border-radius:12px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    display:flex;flex-direction:column;gap:8px;
+  }
+  .label{font-size:13px;color:var(--muted)}
+  .value{font-size:20px;font-weight:700}
+  .sub{font-size:12px;color:var(--muted)}
+
+  /* Table / Details */
+  .details{grid-column: span 7;}
+  .percentiles{grid-column: span 5;}
+  .small{font-size:13px;color:var(--muted)}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:8px;
+    font-size:13px;
+  }
+  th,td{
+    text-align:left;
+    padding:8px 10px;
+    border-bottom:1px dashed rgba(255,255,255,0.03);
+  }
+  th{color:var(--muted);font-weight:600;font-size:13px}
+  td strong{color:#fff}
+
+  /* Progress bars for percentiles */
+  .p-row{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .p-label{width:60px;font-size:13px;color:var(--muted)}
+  .bar{
+    flex:1;background:var(--glass);height:12px;border-radius:999px;overflow:hidden;
+    position:relative;
+  }
+  .bar > i{
+    display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    border-radius:999px 0 0 999px;width:0%;
+    box-shadow: 0 6px 18px rgba(34,197,94,0.12);
+  }
+  .p-value{width:56px;text-align:right;font-size:13px;color:var(--muted)}
+
+  /* Responsive */
+  @media (max-width:900px){
+    .summary{grid-template-columns:repeat(2,1fr)}
+    .details{grid-column:span 12}
+    .percentiles{grid-column:span 12}
+    .grid{grid-auto-rows:auto}
+  }
+
+  /* footer raw output */
+  pre.raw{
+    background: rgba(0,0,0,0.25);
+    padding:12px;border-radius:10px;color:#dfeffc;
+    overflow:auto;font-size:12px;margin-top:12px;
+    border:1px solid rgba(255,255,255,0.03)
+  }
+
+  /* small badge */
+  .badge{
+    display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px;
+    background: rgba(255,255,255,0.03);
+    color:var(--accent);
+    border:1px solid rgba(124, 58, 237, 0.06)
+  }
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">AB</div>
+      <div>
+        <h1>Reporte de Performance — ApacheBench</h1>
+        <p>Servidor probado: <strong>www.uade.edu.ar</strong> · Fecha: <span class="small">Reporte generado (AB output)</span></p>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div class="badge">Benchmark: ApacheBench 2.3</div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <!-- Summary cards -->
+      <div class="card summary" style="grid-column: span 12;">
+        <div class="item">
+          <div class="label">Requests por segundo</div>
+          <div class="value">16.42 <span class="sub">#/sec (mean)</span></div>
+          <div class="small">Throughput: 100 requests en 6.091s</div>
+        </div>
+
+        <div class="item">
+          <div class="label">Tiempo por request (mean)</div>
+          <div class="value">609.11 ms</div>
+          <div class="small">Promedio total / across concurrent: 60.91 ms</div>
+        </div>
+
+        <div class="item">
+          <div class="label">Failed requests</div>
+          <div class="value" style="color:var(--danger)">71</div>
+          <div class="small">Errores por longitud de respuesta (Length: 71)</div>
+        </div>
+
+        <div class="item">
+          <div class="label">Transfer rate</div>
+          <div class="value">2199.10 KB/s</div>
+          <div class="small">Total transferido: 13,716,455 bytes</div>
+        </div>
+      </div>
+
+      <!-- Details table -->
+      <div class="card details">
+        <h3 style="margin-bottom:8px">Detalles del servidor y test</h3>
+        <table aria-labelledby="table-1">
+          <tbody>
+            <tr><th>Server Software</th><td><strong>--</strong></td></tr>
+            <tr><th>Server Hostname</th><td><strong>www.uade.edu.ar</strong></td></tr>
+            <tr><th>Server Port</th><td><strong>443 (HTTPS)</strong></td></tr>
+            <tr><th>TLS</th><td class="small">TLSv1.2 · ECDHE-RSA-AES128-GCM-SHA256 · ECDH P-256</td></tr>
+            <tr><th>Document Path</th><td><strong>/</strong></td></tr>
+            <tr><th>Document Length</th><td><strong>136,290 bytes</strong></td></tr>
+            <tr><th>Concurrent Level</th><td><strong>10</strong></td></tr>
+            <tr><th>Time for tests</th><td><strong>6.091 s</strong></td></tr>
+            <tr><th>Complete requests</th><td><strong>100</strong></td></tr>
+          </tbody>
+        </table>
+
+        <h4 style="margin-top:14px;margin-bottom:6px">Connection Times (ms)</h4>
+        <table>
+          <thead>
+            <tr><th>Tipo</th><th>min</th><th>mean[+/-sd]</th><th>median</th><th>max</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Connect</td><td><strong>24</strong></td><td><strong>70</strong> (112.6)</td><td><strong>56</strong></td><td><strong>1155</strong></td></tr>
+            <tr><td>Processing</td><td><strong>160</strong></td><td><strong>475</strong> (404.5)</td><td><strong>309</strong></td><td><strong>1456</strong></td></tr>
+            <tr><td>Waiting</td><td><strong>141</strong></td><td><strong>210</strong> (111.7)</td><td><strong>176</strong></td><td><strong>1151</strong></td></tr>
+            <tr><td>Total</td><td><strong>194</strong></td><td><strong>545</strong> (426.7)</td><td><strong>363</strong></td><td><strong>1755</strong></td></tr>
+          </tbody>
+        </table>
+
+      </div>
+
+      <!-- Percentiles visual -->
+      <div class="card percentiles">
+        <h3 style="margin-bottom:8px">Percentiles / Distribución de latencias</h3>
+
+        <!-- Each row: label, bar showing relative length (we'll scale wrt 1755ms max) -->
+        <!-- We'll compute width % = value / 1755 * 100 inline in style -->
+        <div class="p-row">
+          <div class="p-label">50%</div>
+          <div class="bar" aria-hidden="true"><i style="width:20.66%"></i></div>
+          <div class="p-value">363 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">66%</div>
+          <div class="bar"><i style="width:26.94%"></i></div>
+          <div class="p-value">473 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">75%</div>
+          <div class="bar"><i style="width:29.21%"></i></div>
+          <div class="p-value">513 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">80%</div>
+          <div class="bar"><i style="width:35.38%"></i></div>
+          <div class="p-value">621 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">90%</div>
+          <div class="bar"><i style="width:79.64%"></i></div>
+          <div class="p-value">1398 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">95%</div>
+          <div class="bar"><i style="width:83.33%"></i></div>
+          <div class="p-value">1461 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">98%</div>
+          <div class="bar"><i style="width:86.93%"></i></div>
+          <div class="p-value">1526 ms</div>
+        </div>
+
+        <div class="p-row">
+          <div class="p-label">99%</div>
+          <div class="bar"><i style="width:100%"></i></div>
+          <div class="p-value">1755 ms</div>
+        </div>
+
+        <p class="small" style="margin-top:12px">
+          Nota: el máximo registrado fue <strong>1755 ms</strong>. Las barras están escaladas respecto a este valor para facilitar la comparación visual.
+        </p>
+
+      </div>
+
+      <!-- Raw output -->
+      <div class="card" style="grid-column: span 12;">
+        <h3>Salida original (ApacheBench)</h3>
+        <pre class="raw">
+This is ApacheBench, Version 2.3 &lt;$Revision: 1903618 $&gt;
+Benchmarking www.uade.edu.ar (be patient).....done
+
+Server Hostname:        www.uade.edu.ar
+Server Port:            443
+SSL/TLS Protocol:       TLSv1.2,ECDHE-RSA-AES128-GCM-SHA256,2048,128
+Document Path:          /
+Document Length:        136290 bytes
+
+Concurrency Level:      10
+Time taken for tests:   6.091 seconds
+Complete requests:      100
+Failed requests:        71
+Total transferred:      13716455 bytes
+HTML transferred:       13628955 bytes
+Requests per second:    16.42 [#/sec] (mean)
+Time per request:       609.112 [ms] (mean)
+Time per request:       60.911 [ms] (mean, across all concurrent requests)
+Transfer rate:          2199.10 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:       24   70 112.6     56    1155
+Processing:   160  475 404.5    309    1456
+Waiting:      141  210 111.7    176    1151
+Total:        194  545 426.7    363    1755
+
+Percentage of the requests served within a certain time (ms)
+  50%    363
+  66%    473
+  75%    513
+  80%    621
+  90%   1398
+  95%   1461
+  98%   1526
+  99%   1755
+ 100%   1755 (longest request)
+        </pre>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Optional small script to animate bars on load -->
+  <script>
+    // simple animation: expand bars from 0 to their width
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.querySelectorAll('.bar > i').forEach((el,i)=>{
+        const w = el.style.width;
+        el.style.width='0%';
+        setTimeout(()=> el.style.width = w, 120 + i*80);
+      });
+    });
+  </script>
+</body>
+</html>
